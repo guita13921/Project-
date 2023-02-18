@@ -4,24 +4,28 @@ public class Box {
     private long deposit = 0;
     Player owner = null;
 
-    public Box(int row,int column){
+
+    protected Box(int row,int column){
         this.row = row;
         this.column = column;
     }
 
-    public void ChangeOwner(Player player){
+    protected void ChangeDeposit(long input){
+        deposit = deposit + input;
+    }
+    protected void ChangeOwner(Player player){
         owner = player;
     }
 
-    public int box_row_show(){
+    protected int box_row_show(){
         return row;
     }
 
-    public int box_column_show(){
+    protected int box_column_show(){
         return column;
     }
 
-    public long box_deposit_show(){
+    protected long box_deposit_show(){
         return deposit;
     }
 }
