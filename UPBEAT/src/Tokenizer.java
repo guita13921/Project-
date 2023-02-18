@@ -42,15 +42,15 @@ public class Tokenizer {
         if (Character.isAlphabetic(c)) {
             s.append(c);
             for (position++; position < token.length() &&
-                    isDigit(token.charAt(position)); position++)
+                    Character.isAlphabetic(token.charAt(position)); position++)
                 s.append(token.charAt(position));
         }else if(c == '+' || c == '-' || c == '*'|| c == '/'|| c == '%'|| c == '('|| c == ')'|| c == '{'|| c == '}'|| c == '^'|| c == '='){
             s.append(c); position++;
         }else if(isDigit(c)){
             s.append(c);
-            for(position++; position < token.length() && Character.isAlphabetic(token.charAt(position)); position++) {
+            for (position++; position < token.length() &&
+                    isDigit(token.charAt(position)); position++)
                 s.append(token.charAt(position));
-            }
         }else throw new LexicalError();
         next = s.toString();
     }
