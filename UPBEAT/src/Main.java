@@ -21,9 +21,12 @@ public class Main {
         System.out.println(token2.consume());
         System.out.println(token2.consume());
         System.out.println(token2.consume());
-        */
+
+
         Reader read = new Reader("Sample construction plan.txt");
         read.readFile();
+         */
+        Configuration_Reader conRead = new Configuration_Reader("");
 
     }
 }
