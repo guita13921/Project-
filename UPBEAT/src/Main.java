@@ -27,6 +27,5 @@ public class Main {
         read.readFile();
          */
         Configuration_Reader conRead = new Configuration_Reader("");
-
     }
 }

@@ -2,10 +2,15 @@ public class Box {
     private final int row;
     private final int column;
     private long deposit = 0;
+    Player owner = null;
 
     public Box(int row,int column){
         this.row = row;
         this.column = column;
+    }
+
+    public void ChangeOwner(Player player){
+        owner = player;
     }
 
     public int box_row_show(){
