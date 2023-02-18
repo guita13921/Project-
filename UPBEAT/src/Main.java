@@ -1,6 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-
+        /*
         Tokenizer token = new Tokenizer("t = t + 1");
         System.out.println(token.show_token());
         System.out.println(token.consume());
@@ -21,7 +21,9 @@ public class Main {
         System.out.println(token2.consume());
         System.out.println(token2.consume());
         System.out.println(token2.consume());
-
+        */
+        Reader read = new Reader("Sample construction plan.txt");
+        read.readFile();
 
     }
 }
