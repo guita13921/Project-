@@ -150,12 +150,12 @@ public class Parser implements ParserInterface{
         try{
             if(tkz.peek("Expression")){
                 tkz.consume();
-
             }
         }catch (IllegalArgumentException | NoSuchElementException e){
             throw new SyntaxError(e.getMessage());
         }
     }
+
     private void WhileStatement() throws SyntaxError{
         try{
             if(tkz.peek("whileExpressionStatement")){
@@ -250,6 +250,4 @@ public class Parser implements ParserInterface{
             throw new SyntaxError(e.getMessage());
         }
     }
-
-
 }

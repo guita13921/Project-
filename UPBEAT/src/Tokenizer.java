@@ -1,4 +1,5 @@
 import java.util.NoSuchElementException;
+import java.util.List;
 
 public class Tokenizer {
     private final String token;
@@ -87,6 +88,11 @@ public class Tokenizer {
         return token;
     }
 
+    public int size(){
+        return token.length();
+    }
 
-
+    public int get(int i) {
+        return position;
+    }
 }

@@ -1,3 +1,7 @@
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
         /*
@@ -14,18 +18,11 @@ public class Main {
         System.out.println(token1.consume());
         System.out.println(token1.consume());
 
-        Tokenizer token2 = new Tokenizer("if (deposit - 100)");
-        System.out.println(token2.consume());
-        System.out.println(token2.consume());
-        System.out.println(token2.consume());
-        System.out.println(token2.consume());
-        System.out.println(token2.consume());
-        System.out.println(token2.consume());
 
 
         Reader read = new Reader("Sample construction plan.txt");
         read.readFile();
-         */
         Configuration_Reader conRead = new Configuration_Reader("");
+         */
     }
 }
