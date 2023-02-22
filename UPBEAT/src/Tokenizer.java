@@ -3,35 +3,16 @@ import java.util.List;
 
 public class Tokenizer {
     private final String token;
-    private String next;
+    private String next = "";
     private int position = 0;
+    private int line = 1;
 
 
-    public Tokenizer(String token){
+    public Tokenizer(String token) throws SyntaxError{
         this.token = token;
         computeNext();
     }
-
-    public boolean hasNextToken(){
-        return next != null;
-    }
-
-    public String peek(){
-        if(!hasNextToken()){
-            throw new NoSuchElementException("no more token");
-        }else{
-            return next;
-        }
-    }
-
-    public String consume(){
-        if(!hasNextToken()) throw new NoSuchElementException("no more token");
-        String result = next;
-        computeNext();
-        return result;
-    }
-
-    private void computeNext() {
+    private void computeNext() throws SyntaxError{
         StringBuilder s = new StringBuilder();
         while (position < token.length() && isSpace(token.charAt(position)))
             position++; // ignore whitespace
@@ -55,6 +36,27 @@ public class Tokenizer {
         }else throw new LexicalError();
         next = s.toString();
     }
+
+    public boolean hasNextToken(){
+        return next != null;
+    }
+
+    public String peek(){
+        if(!hasNextToken()){
+            throw new NoSuchElementException("no more token");
+        }else{
+            return next;
+        }
+    }
+
+    public String consume(){
+        if(!hasNextToken()) throw new NoSuchElementException("no more token");
+        String result = next;
+        computeNext();
+        return result;
+    }
+
+
 
     /** Returns true if
      *  the next token (if any) is s. */

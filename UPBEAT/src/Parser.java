@@ -1,8 +1,11 @@
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 public class Parser implements ParserInterface{
 
     private final Tokenizer tkz;
+
+    private final Statement stm;
     public Parser(Tokenizer tkz){ this.tkz = tkz;}
     @Override
     public void parse() throws SyntaxError {
@@ -12,23 +15,44 @@ public class Parser implements ParserInterface{
             throw e;
         }
     }
-    private String Statement() throws SyntaxError{
+    private Statement Statement() throws SyntaxError{
+        Statement stm;
+        char beChar = tkz.consume().charAt(0);
+
         try{
             if(tkz.peek("Command")){
                 tkz.consume();
                 Command();
             }
-            else if(tkz.peek("BlockStatement")){
-                tkz.consume();
-                BlockStatement();
+            else if (tkz.peek("done")){
+                ActionCommand();
+            }else if(tkz.peek("relocate")){
+                ActionCommand();
             }
-            else if(tkz.peek("IfStatement")){
+            else if(tkz.peek("move")){
+                MoveCommand(tkz.consume());
+            }else if(tkz.peek("invest")){
                 tkz.consume();
-                IfStatement();
+                RegionCommand(tkz.consume());
             }
-            else if(tkz.peek("WhileStatement")){
+            else if(tkz.peek("collect")){
                 tkz.consume();
-                WhileStatement();
+                RegionCommand(tkz.consume());
+            }else if(tkz.peek("shoot")){
+                tkz.consume();
+                AttackCommand(tkz.consume());
+            }
+            else if(tkz.peek("{")){
+                tkz.consume();
+                BlockStatement(tkz.consume());
+            }
+            else if(tkz.peek("if")){
+                tkz.consume();
+                IfStatement(tkz.consume());
+            }
+            else if(tkz.peek("while")){
+                tkz.consume();
+                WhileStatement(tkz.consume());
             }
 
         }catch (IllegalArgumentException | NoSuchElementException e){
@@ -52,7 +76,7 @@ public class Parser implements ParserInterface{
         }
     }
 
-    private void AssignmentStatement() throws SyntaxError{
+    private void AssignmentStatement() throws SyntaxError{//////////////////////////
         try{
             if(tkz.peek("Expression")){
                 tkz.consume();
@@ -72,21 +96,21 @@ public class Parser implements ParserInterface{
                 
             }else if(tkz.peek("MoveCommand")){
                 tkz.consume();
-                MoveCommand();
+                MoveCommand(tkz.consume());
             }else if(tkz.peek("RegionCommand")){
                 tkz.consume();
-                RegionCommand();
+                RegionCommand(tkz.consume());
             }else if(tkz.peek("AttackCommand")){
                 tkz.consume();
-                AttackCommand();
+                AttackCommand(tkz.consume());
             }
         }catch (IllegalArgumentException | NoSuchElementException e){
             throw new SyntaxError(e.getMessage());
         }
     }
-    private void MoveCommand() throws SyntaxError{
+    private void MoveCommand(String consume) throws SyntaxError{
         try{
-            if(tkz.peek("Direction")){
+            if(tkz.peek(consume)){
                 tkz.consume();
                 Direction();
             }
@@ -94,7 +118,7 @@ public class Parser implements ParserInterface{
             throw new SyntaxError(e.getMessage());
         }
     }
-    private void RegionCommand() throws SyntaxError{
+    private void RegionCommand(String consume) throws SyntaxError{
         try{
             if(tkz.peek("Expression")){
                 tkz.consume();
@@ -104,9 +128,9 @@ public class Parser implements ParserInterface{
             throw new SyntaxError(e.getMessage());
         }
     }
-    private void AttackCommand() throws SyntaxError{
+    private void AttackCommand(String consume) throws SyntaxError{
         try{
-            if(tkz.peek("shootDirectionExpression")){
+            if(tkz.peek(consume)){
                 tkz.consume();
                 Direction();
             }
@@ -136,29 +160,34 @@ public class Parser implements ParserInterface{
             throw new SyntaxError(e.getMessage());
         }
     }
-    private void BlockStatement() throws SyntaxError{
+    private void BlockStatement(String consume) throws SyntaxError{
         try{
-            if(tkz.peek("Statement")){
+            LinkedList<Statement> l = new LinkedList<>() ;
+            if(tkz.peek("}")){
                 tkz.consume();
                 Statement();
             }
+            else l.add(Statement());
         }catch (IllegalArgumentException | NoSuchElementException e){
             throw new SyntaxError(e.getMessage());
         }
     }
-    private void IfStatement() throws SyntaxError{
+    private void IfStatement(String consume) throws SyntaxError{
         try{
-            if(tkz.peek("Expression")){
-                tkz.consume();
-            }
+            tkz.consume("(");
+            Expression();
+            tkz.consume(")");
+            tkz.consume("then");
+            tkz.consume("else");
+            Statement();
         }catch (IllegalArgumentException | NoSuchElementException e){
             throw new SyntaxError(e.getMessage());
         }
     }
 
-    private void WhileStatement() throws SyntaxError{
+    private void WhileStatement(String consume) throws SyntaxError{
         try{
-            if(tkz.peek("whileExpressionStatement")){
+            if(tkz.peek(consume)){
                 tkz.consume();
                 Statement();
             }
@@ -168,10 +197,10 @@ public class Parser implements ParserInterface{
     }
     private void Expression() throws SyntaxError{
         try{
-            if(tkz.peek("Expression+Term")){
+            if(tkz.peek("+")){
                 tkz.consume();
                 Term();
-            }else if(tkz.peek("Expression-Term")){
+            }else if(tkz.peek("-")){
                 tkz.consume();
                 Term();
             }else if(tkz.peek("Term")){
@@ -185,13 +214,13 @@ public class Parser implements ParserInterface{
 
     private void Term() throws SyntaxError{
         try{
-            if(tkz.peek("Term*Factor")){
+            if(tkz.peek("*")){
                 tkz.consume();
                 Factor();
-            }else if(tkz.peek("Term/Factor")){
+            }else if(tkz.peek("/")){
                 tkz.consume();
                 Factor();
-            }else if(tkz.peek("Term%Factor")){
+            }else if(tkz.peek("%")){
                 tkz.consume();
                 Factor();
             }else if(tkz.peek("Term")){
@@ -205,7 +234,7 @@ public class Parser implements ParserInterface{
 
     private void Factor() throws SyntaxError{
         try{
-            if(tkz.peek("Power^Factor")){
+            if(tkz.peek("^")){
                 tkz.consume();
                 Power();
             }else if(tkz.peek("Power")){
@@ -219,7 +248,7 @@ public class Parser implements ParserInterface{
 
     private void Power() throws SyntaxError{
         try{
-            if(tkz.peek("number")){
+            if(tkz.peek(Integer)){//ต้องการเช็คว่าเป็นตัวเลขเปล่า
                 tkz.consume();
 
             }else if(tkz.peek("identifier")){
@@ -241,6 +270,9 @@ public class Parser implements ParserInterface{
             if(tkz.peek("opponent")){
                 tkz.consume();
 
+            }
+            else if (tkz.peek("nearby")){
+                tkz.consume();
             }
             else if(tkz.peek("Direction")){
                 tkz.consume();
