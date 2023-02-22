@@ -3,8 +3,10 @@ import java.util.NoSuchElementException;
 public class Parser implements ParserInterface{
 
     private final Tokenizer tkz;
+
     public Parser(Tokenizer tkz){ this.tkz = tkz;}
     @Override
+
     public void parse() throws SyntaxError {
         try{
             String and = Statement();
@@ -240,7 +242,6 @@ public class Parser implements ParserInterface{
         try{
             if(tkz.peek("opponent")){
                 tkz.consume();
-
             }
             else if(tkz.peek("Direction")){
                 tkz.consume();
