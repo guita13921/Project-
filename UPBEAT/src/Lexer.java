@@ -80,7 +80,6 @@ public class Lexer {
                 }
             }
         }
-
         throw new RuntimeException("Invalid character: " + currentChar);
     }
 

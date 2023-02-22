@@ -1,3 +1,5 @@
+import com.sun.source.tree.AssignmentTree;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -137,6 +139,58 @@ public class Parser_GPT {
             default:
                 throw new RuntimeException("Invalid direction: " + currentToken.getText());
         }
+    }
+
+    private Command parseCommand(){
+        switch (currentToken.getType()){
+        }
+    }
+    private AssignmentStatement parseAssignmentStatement(){
+
+    }
+
+    private MoveCommand parseMoveCommand(){
+
+    }
+
+    private RegionCommand parseRegionCommand(){
+
+    }
+
+    private AttackCommand parseAttackCommnad(){
+
+    }
+
+    private BlockStatement parseBlockStatement(){
+
+    }
+
+    private IfStatement parseIfStatement(){
+
+    }
+
+    private WhileStatement parseWhileStatement(){
+
+    }
+
+    private Expression parse Expression(){
+
+    }
+
+    private Term parseTerm(){
+
+    }
+
+    private Factor parseFactor(){
+
+    }
+
+    private Power parsePower(){
+
+    }
+
+    private InfoExpression parseInfoExpression(){
+
     }
 
 }
