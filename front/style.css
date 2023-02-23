@@ -1,0 +1,24 @@
+*{
+    margin: 0;
+    padding: 0;
+    
+    }
+    body{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: #161623;
+    }
+    
+    
+    
+    
+    .container .hexagon{
+        position: relative;
+        width: 200px;
+        height: 250px;
+        margin: 0 10px;
+        clip-path: polygon(0 25%, 50% 0 , 100% 25%, 100% 75%,50% 100%,0 75%);
+        background: blue;
+    }
