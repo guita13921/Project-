@@ -4,14 +4,13 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        String input = "2 + 3 * 5";
+        String input = "t = t * 1";
 
-        Lexer lexer = new Lexer(input);
-        List<Token> tokens = lexer.tokenize();
-
-        for (Token token : tokens) {
-            System.out.println(token.getType() + " " + token.getText());
-        }
+        Tokenizer lexer = new Tokenizer(input);
+        System.out.println(lexer.consume());
+        System.out.println(lexer.consume());
+        System.out.println(lexer.consume());
+        System.out.println(lexer.consume());
     }
     /*
             Reader read = new Reader("Sample construction plan.txt");

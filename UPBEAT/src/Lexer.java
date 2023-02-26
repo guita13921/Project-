@@ -87,7 +87,8 @@ public class Lexer {
     public enum TokenType {
         // Single-character tokens
         LPAREN, RPAREN, LBRACE, RBRACE,OP,ASSIGN,
-        COMMA, DOT, MINUS, PLUS, SEMICOLON, SLASH, STAR,
+        COMMA, DOT, MINUS, PLUS, SEMICOLON, SLASH, STAR, MODULO
+        ,
 
         // One or two character tokens
         BANG, BANG_EQUAL,

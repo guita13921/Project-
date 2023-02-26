@@ -18,8 +18,7 @@ public class Tokenizer {
             position++; // ignore whitespace
         if (position == token.length()) {
             next = null;
-            return;
-        } // no more tokens
+            return;        } // no more tokens
         char c = token.charAt(position);
         if (Character.isAlphabetic(c)) {
             s.append(c);
