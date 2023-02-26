@@ -1,3 +1,3 @@
 public interface ParserInterface{
-    void parse() throws SyntaxError;
+    Expr parse() throws SyntaxError;
 }

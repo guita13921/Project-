@@ -1,10 +1,11 @@
 import com.sun.source.tree.AssignmentTree;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Parser_GPT {
-/*
+    /*
     private Lexer lexer;
     private Token currentToken;
 
@@ -22,175 +23,164 @@ public class Parser_GPT {
         return statements;
     }
 
-    // Parse the non-terminal symbol "Statement"
-    private Statement parseStatement() {
-        if (currentToken.getType() == Lexer.TokenType.IDENTIFIER) {
-            // This is a command or assignment statement
-            String identifier = currentToken.getText();
-            currentToken = lexer.nextToken();
-            if (currentToken.getType() == Lexer.TokenType.ASSIGN) {
-                // This is an assignment statement
-                currentToken = lexer.nextToken();
-                Expression expression = parseExpression();
-                return new AssignmentStatement(identifier, expression);
-            } else {
-                // This is an action command
-                return parseActionCommand(identifier);
-            }
-        } else if (currentToken.getType() == Lexer.TokenType.LBRACE) {
-            // This is a block statement
-            currentToken = lexer.nextToken();
-            List<Statement> statements = new ArrayList<>();
-            while (currentToken.getType() != Lexer.TokenType.RBRACE) {
-                statements.add(parseStatement());
-            }
-            currentToken = lexer.nextToken();
-            return new BlockStatement(statements);
-        } else if (currentToken.getType() == Lexer.TokenType.KEYWORD_IF) {
-            // This is an if statement
-            currentToken = lexer.nextToken();
-            expectToken(Lexer.TokenType.LPAREN);
-            Expression condition = parseExpression();
-            expectToken(Lexer.TokenType.KEYWORD_THEN);
-            Statement thenStatement = parseStatement();
-            expectToken(Lexer.TokenType.KEYWORD_ELSE);
-            Statement elseStatement = parseStatement();
-            return new IfStatement(condition, thenStatement, elseStatement);
-        } else if (currentToken.getType() == Lexer.TokenType.KEYWORD_WHILE) {
-            // This is a while statement
-            currentToken = lexer.nextToken();
-            expectToken(Lexer.TokenType.LPAREN);
-            Expression condition = parseExpression();
-            Statement body = parseStatement();
-            return new WhileStatement(condition, body);
-        } else {
-            throw new RuntimeException("Invalid statement: " + currentToken);
+    public Statement parseStatement() throws ParseException {
+        switch (currentToken.getType()) {
+            case KEYWORD_IF:
+                return parseIfStatement();
+            case WHILE:
+                return parseWhileStatement();
+            case LBRACE:
+                return parseBlockStatement();
+            default:
+                return parseCommand();
         }
     }
 
-    // Parse the non-terminal symbol "Command" as an action command
-    private ActionCommand parseActionCommand(String command) {
-        switch (command) {
-            case "done":
-                currentToken = lexer.nextToken();
-                return new DoneCommand();
-            case "relocate":
-                currentToken = lexer.nextToken();
-                return new RelocateCommand();
-            case "move":
+    public Command parseCommand() throws ParseException {
+        switch (currentToken.getType()) {
+            case IDENTIFIER:
+                return parseAssignmentStatement();
+            case DONE:
+            case RELOCATE:
+                return parseActionCommand();
+            case MOVE:
+                return parseMoveCommand();
+            case INVEST:
+            case COLLECT:
+                return parseRegionCommand();
+            case SHOOT:
+                return parseAttackCommand();
+            default:
+                throw new ParseException("Unexpected token " + currentToken.getType());
+        }
+    }
+
+    public AssignmentStatement parseAssignmentStatement() throws ParseException {
+        String identifier = currentToken.getLexeme();
+        match(TokenType.IDENTIFIER);
+        match(TokenType.ASSIGN);
+        Expression expression = parseExpression();
+        return new AssignmentStatement(identifier, expression);
+    }
+
+    public ActionCommand parseActionCommand() throws ParseException {
+        switch (currentToken.getType()) {
+            case DONE:
+                match(TokenType.DONE);
+                return new ActionCommand(ActionType.DONE);
+            case RELOCATE:
+                match(TokenType.RELOCATE);
+                return new ActionCommand(ActionType.RELOCATE);
+            default:
+                throw new ParseException("Unexpected token " + currentToken.getType());
+        }
+    }
+
+    public MoveCommand parseMoveCommand() throws ParseException {
+        match(TokenType.MOVE);
+        Direction direction = parseDirection();
+        return new MoveCommand(direction);
+    }
+
+    public RegionCommand parseRegionCommand() throws ParseException {
+        switch (currentToken.getType()) {
+            case INVEST:
+                match(TokenType.INVEST);
+                Expression investExpr = parseExpression();
+                return new RegionCommand(RegionType.INVEST, investExpr);
+            case COLLECT:
+                match(TokenType.COLLECT);
+                Expression collectExpr = parseExpression();
+                return new RegionCommand(RegionType.COLLECT, collectExpr);
+            default:
+                throw new ParseException("Unexpected token " + currentToken.getType());
+        }
+    }
+
+    public AttackCommand parseAttackCommand() throws ParseException {
+        match(TokenType.SHOOT);
+        Direction direction = parseDirection();
+        Expression expression = parseExpression();
+        return new AttackCommand(direction, expression);
+    }
+
+    public IfStatement parseIfStatement() throws ParseException {
+        match(TokenType.IF);
+        match(TokenType.LEFT_PAREN);
+        Expression condition = parseExpression();
+        match(TokenType.RIGHT_PAREN);
+        Statement thenStatement = parseStatement();
+        match(TokenType.ELSE);
+        Statement elseStatement = parseStatement();
+        return new IfStatement(condition, thenStatement, elseStatement);
+    }
+
+    public WhileStatement parseWhileStatement() throws ParseException {
+        match(TokenType.WHILE);
+        match(TokenType.LEFT_PAREN);
+        Expression condition = parseExpression();
+        match(TokenType.RIGHT_PAREN);
+        Statement body = parseStatement();
+        return new WhileStatement(condition, body);
+    }
+
+    public BlockStatement parseBlockStatement() throws ParseException {
+        match(TokenType.LEFT_BRACE);
+        List<Statement> statements = new ArrayList<>();
+        while (currentToken.getType() != TokenType.RIGHT_BRACE) {
+            Statement statement = parseStatement();
+            statements.add(statement);
+        }
+        match(TokenType.RIGHT_BRACE);
+        return new BlockStatement(statements);
+    }
+
+    public Direction parseDirection() throws ParseException {
+        switch (currentToken.getType()) {
+            case UP:
+                match(TokenType.UP);
+                return Direction.UP;
+            case DOWN:
+                match(TokenType.DOWN);
+                return Direction.DOWN;
+            case UP_LEFT:
+                match(TokenType.UP_LEFT);
+                return Direction.UP_LEFT;
+            case UP_RIGHT:
+                match(TokenType.UP_RIGHT);
+                return Direction.UP_RIGHT;
+        }
+        return null;
+    }
+
+    private ActionCommand parseActionCommand() throws ParseException {
+        switch (currentToken.getType()) {
+            case DONE:
+                match(TokenType.DONE);
+                return new ActionCommand(ActionCommandType.DONE);
+            case RELOCATE:
+                match(TokenType.RELOCATE);
+                return new ActionCommand(ActionCommandType.RELOCATE);
+            case MOVE:
+                match(TokenType.MOVE);
                 Direction direction = parseDirection();
                 return new MoveCommand(direction);
-            case "invest":
-                currentToken = lexer.nextToken();
-                Expression expression = parseExpression();
-                return new InvestCommand(expression);
-            case "collect":
-                currentToken = lexer.nextToken();
-                expression = parseExpression();
-                return new CollectCommand(expression);
-            case "shoot":
-                direction = parseDirection();
-                expectToken(Lexer.TokenType.NUMBER);
-                long power = Long.parseLong(currentToken.getText());
-                currentToken = lexer.nextToken();
-                return new AttackCommand(direction, power);
+            case INVEST:
+                match(TokenType.INVEST);
+                Expression investExpr = parseExpression();
+                return new RegionCommand(RegionCommandType.INVEST, investExpr);
+            case COLLECT:
+                match(TokenType.COLLECT);
+                Expression collectExpr = parseExpression();
+                return new RegionCommand(RegionCommandType.COLLECT, collectExpr);
+            case SHOOT:
+                match(TokenType.SHOOT);
+                Direction shootDirection = parseDirection();
+                Expression shootExpr = parseExpression();
+                return new AttackCommand(shootDirection, shootExpr);
             default:
-                throw new RuntimeException("Invalid command: " + command);
+                throw new ParseException("Invalid action command", currentToken);
         }
     }
-
-    // Parse the non-terminal symbol "Direction"
-    private Direction parseDirection() {
-        switch (currentToken.getType()) {
-            case KEYWORD_UP:
-                consumeToken();
-                if (currentToken.getType() == TokenType.KEYWORD_LEFT) {
-                    consumeToken();
-                    return Direction.UP_LEFT;
-                } else if (currentToken.getType() == TokenType.KEYWORD_RIGHT) {
-                    consumeToken();
-                    return Direction.UP_RIGHT;
-                } else {
-                    return Direction.UP;
-                }
-            case KEYWORD_DOWN:
-                consumeToken();
-                if (currentToken.getType() == TokenType.KEYWORD_LEFT) {
-                    consumeToken();
-                    return Direction.DOWN_LEFT;
-                } else if (currentToken.getType() == TokenType.KEYWORD_RIGHT) {
-                    consumeToken();
-                    return Direction.DOWN_RIGHT;
-                } else {
-                    return Direction.DOWN;
-                }
-            case KEYWORD_UPLEFT:
-                consumeToken();
-                return Direction.UP_LEFT;
-            case KEYWORD_UPRIGHT:
-                consumeToken();
-                return Direction.UP_RIGHT;
-            case KEYWORD_DOWNLEFT:
-                consumeToken();
-                return Direction.DOWN_LEFT;
-            case KEYWORD_DOWNRIGHT:
-                consumeToken();
-                return Direction.DOWN_RIGHT;
-            default:
-                throw new RuntimeException("Invalid direction: " + currentToken.getText());
-        }
-    }
-
-    private Command parseCommand(){
-        switch (currentToken.getType()){
-        }
-    }
-    private AssignmentStatement parseAssignmentStatement(){
-
-    }
-
-    private MoveCommand parseMoveCommand(){
-
-    }
-
-    private RegionCommand parseRegionCommand(){
-
-    }
-
-    private AttackCommand parseAttackCommnad(){
-
-    }
-
-    private BlockStatement parseBlockStatement(){
-
-    }
-
-    private IfStatement parseIfStatement(){
-
-    }
-
-    private WhileStatement parseWhileStatement(){
-
-    }
-
-    private Expression parseExpression(){
-
-    }
-
-    private Term parseTerm(){
-
-    }
-
-    private Factor parseFactor(){
-
-    }
-
-    private Power parsePower(){
-
-    }
-
-    private InfoExpression parseInfoExpression(){
-
-    }
- */
+*/
 }
