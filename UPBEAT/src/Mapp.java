@@ -1,9 +1,10 @@
 import java.util.ArrayList;
 
 public class Mapp {
-  private int Budget = 0;
-  private int m;
-  private int n;
+  protected int Budget = 0;
+  protected int m;
+  protected int n;
+  protected
   ArrayList<Box> map = new ArrayList<>();
 
   public void MappArea(int n, int m) {
@@ -19,16 +20,4 @@ public class Mapp {
       }
     }
   }
-  public void own(){
   }
-  public void Invest(int invest) {
-    Budget = Budget+invest;
-    if(Budget>0) {
-      own();
-    }else if(Budget == 0){
-      own();
-    }if(Budget <0){
-      own();
-    }
-  }
-}
