@@ -6,7 +6,8 @@ public class Player {
     int budget;
     Box citycenter;
     Box location;
-    protected Mapp oneone;
+    protected Mapp oneone = new Mapp();
+
     HashSet<Mapp>Own = new HashSet<>();
     private void puty(Mapp x){
         Own.add(x);
