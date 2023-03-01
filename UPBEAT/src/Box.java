@@ -1,8 +1,9 @@
 public class Box {
-    private final int row;
-    private final int column;
-    private long deposit = 0;
+    protected final int row;
+    protected final int column;
+    protected long deposit = 0;
     Player owner = null;
+
 
 
     protected Box(int row,int column){
@@ -12,9 +13,17 @@ public class Box {
 
     protected void ChangeDeposit(long input){
         deposit = deposit + input;
+        if(deposit == 0){
+            owner = null;
+        }else if(deposit >0){
+            return;
+        }else if(deposit < 0 ){
+            ChangeOwner();
+            deposit = Math.abs(deposit);
+        }
     }
-    protected void ChangeOwner(Player player){
-        owner = player;
+    protected void ChangeOwner(){//มันน่าจะไม่ต้องรับมั้ง
+        owner = new Player();//อันนีอยากให้เปลี่ยนเป็นคนที่ลงทุน //หาวิธีเปลี่ยนเจ้าของ
     }
 
     protected int box_row_show(){
