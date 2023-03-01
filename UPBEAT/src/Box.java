@@ -23,7 +23,7 @@ public class Box {
         }
     }
     private void ChangeOwner(Player Player){//มันน่าจะไม่ต้องรับมั้ง
-        this.owner = new Player();//อันนีอยากให้เปลี่ยนเป็นคนที่ลงทุน //หาวิธีเปลี่ยนเจ้าของ
+        this.owner = Player;//อันนีอยากให้เปลี่ยนเป็นคนที่ลงทุน //หาวิธีเปลี่ยนเจ้าของ
     }
 
     protected int box_row_show(){
