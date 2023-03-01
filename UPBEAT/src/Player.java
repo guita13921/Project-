@@ -6,12 +6,27 @@ public class Player {
     int budget;
     Box citycenter;
     Box location;
+    Box box1 = new Box(1, 1);
 
 
-    LinkedList<Box>OwnBox = new LinkedList<>();
+    static LinkedList<Box>OwnBox = new LinkedList<>();
+    protected void getBox(){
+        if(box1.owner == this){
+            OwnBox.add(box1);
+        }
+    }
+
+    public static void main(String[] args) {
+            Player p1 = new Player();
+            Player p2 = new Player();
+            p1.box1.ChangeDeposit(23, p1);
+            p1.getBox();
+            System.out.println(OwnBox.size());
+
+        }
+    }
 
 
-}
 
 
 

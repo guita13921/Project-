@@ -11,19 +11,19 @@ public class Box {
         this.column = column;
     }
 
-    protected void ChangeDeposit(long input){
+    protected void ChangeDeposit(long input,Player Player){
         deposit = deposit + input;
         if(deposit == 0){
-            owner = null;
+            this.owner = null;
         }else if(deposit >0){
             return;
         }else if(deposit < 0 ){
-            ChangeOwner();
-            deposit = Math.abs(deposit);
+            ChangeOwner(Player);
+            this.deposit = Math.abs(deposit);
         }
     }
-    protected void ChangeOwner(){//มันน่าจะไม่ต้องรับมั้ง
-        owner = new Player();//อันนีอยากให้เปลี่ยนเป็นคนที่ลงทุน //หาวิธีเปลี่ยนเจ้าของ
+    private void ChangeOwner(Player Player){//มันน่าจะไม่ต้องรับมั้ง
+        this.owner = new Player();//อันนีอยากให้เปลี่ยนเป็นคนที่ลงทุน //หาวิธีเปลี่ยนเจ้าของ
     }
 
     protected int box_row_show(){

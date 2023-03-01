@@ -12,13 +12,16 @@ public class Main {
         StringBuilder sb = new StringBuilder();
         //parse_a.prettyPrint(sb);
          */
-        Player p1 = new Player();
-        Mapp x = null;
-        p1.puty(x);
-        System.out.println(p1.Own.isEmpty());
-        p1.Invest(1);
-        System.out.println(p1.Own);
+//        Player p1 = new Player();
+//        Mapp x = null;
+//        p1.puty(x);
+//        System.out.println(p1.Own.isEmpty());
+//        p1.Invest(1);
+//        System.out.println(p1.Own);
     }
+
+
+
 
     /*
             Reader read = new Reader("Sample construction plan.txt");
