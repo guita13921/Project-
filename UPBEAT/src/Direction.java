@@ -1,8 +1,8 @@
 import java.util.Map;
 
-public class Identifier implements Expr{
+public class Direction implements Expr{
     private final String name;
-    public Identifier(String name){
+    public Direction(String name){
         this.name = name;
         System.out.println("IM "+name);
     }

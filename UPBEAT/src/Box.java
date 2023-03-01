@@ -2,7 +2,7 @@ public class Box {
     protected final int row;
     protected final int column;
     protected long deposit = 0;
-    Player owner = null;
+    private Player owner = null;
 
 
 
@@ -22,6 +22,7 @@ public class Box {
             deposit = Math.abs(deposit);
         }
     }
+
     protected void ChangeOwner(){//มันน่าจะไม่ต้องรับมั้ง
         owner = new Player();//อันนีอยากให้เปลี่ยนเป็นคนที่ลงทุน //หาวิธีเปลี่ยนเจ้าของ
     }

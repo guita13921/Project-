@@ -18,7 +18,8 @@ public class Parser implements ParserInterface{
 
     private Expr parseStatement() throws SyntaxError{
         System.out.println("IM parseStatement");
-        if (tkz.peek("{")) {
+        String value = tkz.peek();
+        if (!isReservedKeyword(value) && value != null) {
             Expr v = parseBlockStatement();
             return v;
         } else if (tkz.peek("if")) {
@@ -50,21 +51,22 @@ public class Parser implements ParserInterface{
         System.out.println("IM parseAssignmentStatement");
         String value = tkz.peek();
         if(!isReservedKeyword(value)){
-            tkz.consume();
-            //กำหนดตัวแปร
+            Expr v = new Identifier(tkz.consume());
+            String op = tkz.peek();
             tkz.consume("=");
-            Expr v = parseExpression();
-            return v;
+            Expr right = parseExpression();
+            return new BinaryAri(v,op,right);
         }else{
             throw new SyntaxError("Wrong in parseAssignmentStatement");
         }
     }
 
     private Expr parseActionCommand() throws SyntaxError{
-            if(tkz.peek("done")){
-                //tkz.consume("done");
-            }else if(tkz.peek("relocate")){
-                //tkz.consume("relocate");
+        String value = tkz.peek();
+            if(value.equals("done")){
+                return new ActionCommand(tkz.consume());
+            }else if(value.equals("relocate")){
+                return new ActionCommand(tkz.consume());
             }else if(tkz.peek("move")){
                 Expr v = parseMoveCommand();
                 return v;
@@ -80,84 +82,71 @@ public class Parser implements ParserInterface{
 
     private Expr parseMoveCommand() throws SyntaxError{
         System.out.println("parseMoveCommand");
-        //move
+        tkz.consume("move");
         Expr v = parseDirection();
         return v;
     }
 
     private Expr parseRegionCommand() throws SyntaxError{
         System.out.println("IM parseRegionCommand");
-        if(tkz.peek("invest")) {
-            //invest
-            Expr v = parseExpression();
-            return v;
-        }else{
-            //collect
-            Expr v = parseExpression();
-            return v;
-        }
+        String value = tkz.peek();
+        RegionCommand op = new RegionCommand(value);
+        tkz.consume(value);
+        Expr v = parseExpression();
+        return new BinaryAri(null,op,v);
     }
 
     private Expr parseAttackCommand() throws SyntaxError{  //Not finish
         System.out.println("IM parseAttackCommand");
-        //shoot
-        Expr v = parseDirection();
+        Expr v =
         v = parseExpression();
         return v;
     }
 
     private Expr parseDirection() throws SyntaxError{
-            if(tkz.peek("up")){
-                tkz.consume();
-
-            }else if(tkz.peek("down")){
-                tkz.consume();
-            }
-            else if(tkz.peek("upleft")){
-                tkz.consume();
-            }else if(tkz.peek("downleft")){
-                tkz.consume();
-            }else if(tkz.peek("upright")){
-                tkz.consume();
-            }else if(tkz.peek("downright")){
-                tkz.consume();
-            }
-        return null;
+        System.out.println("IM parseDirection");
+        return new Direction(tkz.consume());
     }
 
     private Expr parseBlockStatement() throws SyntaxError{ //Not FInish
         System.out.println("IM parseBlockStatement");
         tkz.consume("{");
-        //Statement
-        return null;
+        String value = tkz.peek();
+        if(value.equals("}")){
+            tkz.consume("}");
+            return null;
+        }else {
+            Expr v = parseStatement();
+            return v;
+        }
     }
     private Expr parseIfStatement() throws SyntaxError{
         System.out.println("IM IfStatement");
-            tkz.consume();
-            tkz.consume("(");
-            Expr v = parseExpression();
-            tkz.consume(")");
-            Expr THEN = null;
-            Expr ELSE = null;
-            if(tkz.peek("then")){
-                tkz.consume();
-                THEN = parseStatement();
-            }
-            if(tkz.peek("else")){
-                tkz.consume();
-                ELSE = parseStatement();
-            }
-            v = new BinaryAri(v,THEN,ELSE);
-            return v;
+        tkz.consume("if");
+        tkz.consume("(");
+        Expr left = parseExpression();
+        tkz.consume(")");
+        String value = tkz.peek();
+        System.out.println(value);
+        tkz.consume("then");
+        Expr right = parseStatement();
+        Expr v = new BinaryAri(left,value,right);
+        value = tkz.peek();
+        System.out.println(value);
+        tkz.consume("else");
+        Expr right2= parseStatement();
+        v = new BinaryAri(v,value,right2);
+        return v;
     }
 
     private Expr parseWhileStatement() throws SyntaxError{//Not finish
         System.out.println("IM parseWhileStatement");
-        //while
+        tkz.consume("while");
         tkz.consume("(");
-        Expr v = parseExpression();
+        Expr left = parseExpression();
         tkz.consume(")");
-        v = parseStatement();
+        Expr right = parseStatement();
+        Expr v = new BinaryAri(left, (Expr) null,right);
         return v;
     }
 
@@ -190,26 +179,28 @@ public class Parser implements ParserInterface{
                 String operator = tkz.consume();
                 Expr right = parseFactor();
                 v = new BinaryAri(v,operator,right);
+                return v;
+            }else{
+                return v;
             }
-        return null;
     }
 
     private Expr parsePower() throws SyntaxError{ //Not Finish
         System.out.println("IM parsePower");
             String value = tkz.peek();
-            if(isLong(value) || !isReservedKeyword(value)){
-                tkz.consume();
-                //สร้าง identifier หรือ number
+            if(isLong(value)) {
+                return new Number(tkz.consume());
+            }else if(!isReservedKeyword(value)){
+                return new Identifier(tkz.consume());
             }else if(tkz.peek("opponent") || tkz.peek("nearby")){
                 Expr v = parseInfoExpression();
                 return v;
             }else{
                 tkz.consume("(");
-                Expr v = parseExpression();
+                Expr left = parseExpression();
                 tkz.consume(")");
-                return v;
-        }
-            return null;
+                return left;
+            }
     }
 
     private Expr parseInfoExpression() throws SyntaxError{//Not Finish
@@ -253,6 +244,8 @@ public class Parser implements ParserInterface{
             case "upleft":
             case "upright":
             case "while":
+            case "(":
+            case ")":
                 return true;
             default:
                 return false;

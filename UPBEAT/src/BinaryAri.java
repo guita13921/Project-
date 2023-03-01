@@ -19,6 +19,7 @@ public class BinaryAri implements Expr{
     }
 
 
+
     public void prettyPrint(StringBuilder s){
         s.append("(");
         left.prettyPrint(s);

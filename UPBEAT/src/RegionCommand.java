@@ -1,8 +1,8 @@
 import java.util.Map;
 
-public class Identifier implements Expr{
+public class RegionCommand implements Expr{
     private final String name;
-    public Identifier(String name){
+    public RegionCommand(String name){
         this.name = name;
         System.out.println("IM "+name);
     }

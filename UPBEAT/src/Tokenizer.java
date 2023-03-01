@@ -20,7 +20,7 @@ public class Tokenizer {
             next = null;
             return;        } // no more tokens
         char c = token.charAt(position);
-        if (Character.isAlphabetic(c)) {
+        if (Character.isAlphabetic(c)){
             s.append(c);
             for (position++; position < token.length() &&
                     Character.isAlphabetic(token.charAt(position)); position++)
@@ -32,7 +32,12 @@ public class Tokenizer {
             for (position++; position < token.length() &&
                     isDigit(token.charAt(position)); position++)
                 s.append(token.charAt(position));
-        }else throw new LexicalError();
+        }else{
+            s.append(c);
+            for (position++; position < token.length() &&
+                    Character.isAlphabetic(token.charAt(position)); position++)
+                s.append(token.charAt(position));
+        }
         next = s.toString();
     }
 

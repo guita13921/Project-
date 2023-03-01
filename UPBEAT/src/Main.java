@@ -3,21 +3,12 @@
 
 public class Main {
     public static void main(String[] args) {
-        /*
-        String input = "m = 0";
-
+        String input = " while (deposit) { if (deposit - 100) then collect (deposit / 4) else {}\n }";
         Tokenizer lexer = new Tokenizer(input);
         Parser parser = new Parser(lexer);
         Expr parse_a = parser.parse();
         StringBuilder sb = new StringBuilder();
         //parse_a.prettyPrint(sb);
-         */
-        Player p1 = new Player();
-        Mapp x = null;
-        p1.puty(x);
-        System.out.println(p1.Own.isEmpty());
-        p1.Invest(1);
-        System.out.println(p1.Own);
     }
 
     /*
