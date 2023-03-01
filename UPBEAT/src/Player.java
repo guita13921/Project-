@@ -9,9 +9,10 @@ public class Player {
     protected Mapp oneone = new Mapp();
 
     HashSet<Mapp>Own = new HashSet<>();
-    private void puty(Mapp x){
+    public void puty(Mapp x){
         Own.add(x);
     }
+
     public void Invest(int invest){
         oneone.Budget = oneone.Budget+invest;
         if(oneone.Budget>0){
