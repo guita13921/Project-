@@ -62,45 +62,48 @@ public class Parser implements ParserInterface{
 
     private Expr parseActionCommand() throws SyntaxError{
             if(tkz.peek("done")){
-                tkz.consume();
-                
+                //tkz.consume("done");
             }else if(tkz.peek("relocate")){
-                tkz.consume();
-                
-            }else if(tkz.peek("MoveCommand")){
-                tkz.consume();
-                parseMoveCommand();
-            }else if(tkz.peek("RegionCommand")){
-                tkz.consume();
-                parseRegionCommand();
-            }else if(tkz.peek("AttackCommand")){
-                tkz.consume();
-                parseAttackCommand();
+                //tkz.consume("relocate");
+            }else if(tkz.peek("move")){
+                Expr v = parseMoveCommand();
+                return v;
+            }else if(tkz.peek("invest") || tkz.peek("collect")){
+                Expr v = parseRegionCommand();
+                return v;
+            }else if(tkz.peek("shoot")){
+                Expr v = parseAttackCommand();
+                return v;
             }
         return null;
     }
 
     private Expr parseMoveCommand() throws SyntaxError{
-            if(tkz.peek("Direction")){
-                tkz.consume();
-                parseDirection();
-            }
-        return null;
+        System.out.println("parseMoveCommand");
+        //move
+        Expr v = parseDirection();
+        return v;
     }
 
     private Expr parseRegionCommand() throws SyntaxError{
-            if(tkz.peek("Expression")){
-                tkz.consume();
-                parseExpression();
-            }
-        return null;
+        System.out.println("IM parseRegionCommand");
+        if(tkz.peek("invest")) {
+            //invest
+            Expr v = parseExpression();
+            return v;
+        }else{
+            //collect
+            Expr v = parseExpression();
+            return v;
+        }
     }
-    private Expr parseAttackCommand() throws SyntaxError{
-            if(tkz.peek("shootDirectionExpression")){
-                tkz.consume();
-                parseDirection();
-            }
-        return null;
+
+    private Expr parseAttackCommand() throws SyntaxError{  //Not finish
+        System.out.println("IM parseAttackCommand");
+        //shoot
+        Expr v = parseDirection();
+        v = parseExpression();
+        return v;
     }
 
     private Expr parseDirection() throws SyntaxError{
@@ -122,11 +125,10 @@ public class Parser implements ParserInterface{
         return null;
     }
 
-    private Expr parseBlockStatement() throws SyntaxError{
-            if(tkz.peek("Statement")){
-                tkz.consume();
-                parseStatement();
-            }
+    private Expr parseBlockStatement() throws SyntaxError{ //Not FInish
+        System.out.println("IM parseBlockStatement");
+        tkz.consume("{");
+        //Statement
         return null;
     }
     private Expr parseIfStatement() throws SyntaxError{
@@ -149,12 +151,14 @@ public class Parser implements ParserInterface{
             return v;
     }
 
-    private Expr parseWhileStatement() throws SyntaxError{
-            if(tkz.peek("whileExpressionStatement")){
-                tkz.consume();
-                parseStatement();
-            }
-        return null;
+    private Expr parseWhileStatement() throws SyntaxError{//Not finish
+        System.out.println("IM parseWhileStatement");
+        //while
+        tkz.consume("(");
+        Expr v = parseExpression();
+        tkz.consume(")");
+        v = parseStatement();
+        return v;
     }
 
     private Expr parseExpression() throws SyntaxError{
@@ -208,13 +212,14 @@ public class Parser implements ParserInterface{
             return null;
     }
 
-    private Expr parseInfoExpression() throws SyntaxError{
+    private Expr parseInfoExpression() throws SyntaxError{//Not Finish
+        System.out.println("IM parseInfoExpression");
             if(tkz.peek("opponent")){
-                tkz.consume();
-            }
-            else if(tkz.peek("Direction")){
-                tkz.consume();
-                return parseDirection();
+                //opponent
+            } else if(tkz.peek("nearby")){
+                //nearby
+                Expr v = parseDirection();
+                return v;
             }
         return null;
     }
