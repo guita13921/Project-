@@ -6,7 +6,12 @@ public class Player {
     int budget;
     Box citycenter;
     Box location;
-    Box box1 = new Box(1, 1);
+    String name;
+
+  public Player(String name){
+      this.name = name;
+  }
+    static Box box1 = new Box(1, 1);
 
 
     static LinkedList<Box>OwnBox = new LinkedList<>();
@@ -17,10 +22,12 @@ public class Player {
     }
 
     public static void main(String[] args) {
-            Player p1 = new Player();
-            Player p2 = new Player();
-            p1.box1.ChangeDeposit(23, p1);
+            Player p1 = new Player("hum");
+            p1.box1.ChangeDeposit(23,p1);
+            System.out.println(box1.owner.name);
+            System.out.println(box1.deposit);
             p1.getBox();
+
             System.out.println(OwnBox.size());
 
         }
