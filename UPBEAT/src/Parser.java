@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,11 +19,10 @@ public class Parser implements ParserInterface{
 
     private Expr parseStatement() throws SyntaxError{
         System.out.println("IM parseStatement");
-        String value = tkz.peek();
-        if (!isReservedKeyword(value) && value != null) {
+        if (tkz.peek("{")) {
             Expr v = parseBlockStatement();
             return v;
-        } else if (tkz.peek("if")) {
+        } else if (tkz.peek("if") || tkz.peek("than")) {
             Expr v = parseIfStatement();
             return v;
         } else if (tkz.peek("while")) {
@@ -47,7 +47,7 @@ public class Parser implements ParserInterface{
         }
     }
 
-    private Expr parseAssignmentStatement() throws SyntaxError{ //NOT FINISH
+    private Expr parseAssignmentStatement() throws SyntaxError{
         System.out.println("IM parseAssignmentStatement");
         String value = tkz.peek();
         if(!isReservedKeyword(value)){
@@ -90,17 +90,20 @@ public class Parser implements ParserInterface{
     private Expr parseRegionCommand() throws SyntaxError{
         System.out.println("IM parseRegionCommand");
         String value = tkz.peek();
-        RegionCommand op = new RegionCommand(value);
+        RegionCommand left = new RegionCommand(value);
         tkz.consume(value);
         Expr v = parseExpression();
-        return new BinaryAri(null,op,v);
+        return new BinaryAri(left, (Expr) null,v);
     }
 
-    private Expr parseAttackCommand() throws SyntaxError{  //Not finish
+    private Expr parseAttackCommand() throws SyntaxError{
         System.out.println("IM parseAttackCommand");
-        Expr v =
-        v = parseExpression();
-        return v;
+        String value = tkz.peek();
+        AttackCommand left = new AttackCommand(value);
+        tkz.consume();
+        Expr mid = parseDirection();
+        Expr right = parseExpression();
+        return new BinaryAri(left,mid,right);
     }
 
     private Expr parseDirection() throws SyntaxError{
@@ -110,15 +113,8 @@ public class Parser implements ParserInterface{
 
     private Expr parseBlockStatement() throws SyntaxError{ //Not FInish
         System.out.println("IM parseBlockStatement");
-        tkz.consume("{");
-        String value = tkz.peek();
-        if(value.equals("}")){
-            tkz.consume("}");
-            return null;
-        }else {
-            Expr v = parseStatement();
-            return v;
-        }
+
+        return null;
     }
     private Expr parseIfStatement() throws SyntaxError{
         System.out.println("IM IfStatement");
@@ -129,17 +125,16 @@ public class Parser implements ParserInterface{
         String value = tkz.peek();
         System.out.println(value);
         tkz.consume("then");
-        Expr right = parseStatement();
-        Expr v = new BinaryAri(left,value,right);
+        Expr mid = parseStatement();
         value = tkz.peek();
         System.out.println(value);
         tkz.consume("else");
-        Expr right2= parseStatement();
-        v = new BinaryAri(v,value,right2);
+        Expr right= parseStatement();
+        Expr v = new BinaryAri(left,mid,right);
         return v;
     }
 
-    private Expr parseWhileStatement() throws SyntaxError{//Not finish
+    private Expr parseWhileStatement() throws SyntaxError{
         System.out.println("IM parseWhileStatement");
         tkz.consume("while");
         tkz.consume("(");
@@ -185,7 +180,7 @@ public class Parser implements ParserInterface{
             }
     }
 
-    private Expr parsePower() throws SyntaxError{ //Not Finish
+    private Expr parsePower() throws SyntaxError{
         System.out.println("IM parsePower");
             String value = tkz.peek();
             if(isLong(value)) {
@@ -203,16 +198,16 @@ public class Parser implements ParserInterface{
             }
     }
 
-    private Expr parseInfoExpression() throws SyntaxError{//Not Finish
+    private Expr parseInfoExpression() throws SyntaxError{
         System.out.println("IM parseInfoExpression");
-            if(tkz.peek("opponent")){
-                //opponent
-            } else if(tkz.peek("nearby")){
-                //nearby
-                Expr v = parseDirection();
-                return v;
+        String value = tkz.peek();
+            if(value.equals("opponent")) {
+                return new InfoExpression(tkz.consume());
+            }else {
+                InfoExpression left = new InfoExpression(tkz.consume());
+                Expr right = parseDirection();
+                return new BinaryAri(left, (Expr) null, right);
             }
-        return null;
     }
 
     public static boolean isLong(String input) {
