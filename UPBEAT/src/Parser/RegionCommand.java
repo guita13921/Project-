@@ -1,8 +1,12 @@
+package Parser;
+
+import Parser.Expr;
+
 import java.util.Map;
 
-public class Direction implements Expr{
+public class RegionCommand implements Expr {
     private final String name;
-    public Direction(String name){
+    public RegionCommand(String name){
         this.name = name;
         System.out.println("IM "+name);
     }

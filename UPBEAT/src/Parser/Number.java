@@ -1,7 +1,9 @@
+package Parser;
+
 import java.util.Map;
 
 
-public class Number implements Expr{
+public class Number implements Expr {
     private final String number;
     public Number(String name){
         System.out.println("IM "+name);

@@ -1,8 +1,10 @@
+package Parser;
+
 import java.util.Map;
 
-public class InfoExpression implements Expr{
+public class ActionCommand implements Expr{
     private final String name;
-    public InfoExpression(String name){
+    public ActionCommand(String name){
         this.name = name;
         System.out.println("IM "+name);
     }

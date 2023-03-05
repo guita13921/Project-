@@ -13,7 +13,6 @@ public class Player {
   }
     static Box box1 = new Box(1, 1);
 
-/*
     static LinkedList<Box>OwnBox = new LinkedList<>();
     protected void getBox(){
         if(box1.owner == this){
@@ -31,8 +30,6 @@ public class Player {
             System.out.println(OwnBox.size());
 
         }
-
- */
     }
 
 

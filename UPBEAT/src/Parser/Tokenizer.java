@@ -1,3 +1,5 @@
+package Parser;
+
 import java.util.NoSuchElementException;
 import java.util.List;
 
@@ -8,11 +10,11 @@ public class Tokenizer {
     private int line = 1;
 
 
-    public Tokenizer(String token) throws SyntaxError{
+    public Tokenizer(String token) throws SyntaxError {
         this.token = token;
         computeNext();
     }
-    private void computeNext() throws SyntaxError{
+    private void computeNext() throws SyntaxError {
         StringBuilder s = new StringBuilder();
         while (position < token.length() && isSpace(token.charAt(position)))
             position++; // ignore whitespace
@@ -70,7 +72,7 @@ public class Tokenizer {
     }
 
     /** Consumes the next token if it is s.
-     * Throws SyntaxError otherwise.
+     * Throws Parser.SyntaxError otherwise.
      * effects: removes the next token
      * from input stream if it is s
      */
@@ -78,7 +80,7 @@ public class Tokenizer {
         if(peek(s)){
             consume();
         }else{
-            throw new SyntaxError(s + " SyntaxError");
+            throw new SyntaxError(s + " Parser.SyntaxError");
         }
     }
 
@@ -90,15 +92,12 @@ public class Tokenizer {
         return c >= '0' && c <= '9';
     }
 
-    public String show_token(){
-        return token;
-    }
-
-    public int size(){
-        return token.length();
-    }
-
-    public int get(int i) {
-        return position;
+    public static boolean isNumber(String s) {
+        try {
+            Double.parseDouble(s);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }
