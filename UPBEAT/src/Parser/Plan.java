@@ -28,7 +28,7 @@ public class Plan {
         setIterator();
         while (hasNext()) {
             Statement state = nextState();
-            state.eval();
+            state.evaluate();
             commandList = state.addCommand(commandList);
         }
         return commandList.toString();

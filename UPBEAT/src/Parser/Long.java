@@ -4,6 +4,7 @@ public class Long implements Statement{
     private int val;
 
     public Long(int val) {
+        System.out.println("IM "+val);
         this.val = val;
     }
 

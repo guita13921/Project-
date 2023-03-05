@@ -9,6 +9,7 @@ public class BinaryAri implements Statement{
         this.op = op;
         this.right = right;
     }
+
     @Override
     public long evaluate() {
         long lv = left.evaluate();

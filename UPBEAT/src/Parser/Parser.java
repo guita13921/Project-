@@ -100,15 +100,15 @@ public class Parser implements ParserInterface {
     //AttackCommand → shoot Direction Expression
     private Statement parseAttackCommand() throws SyntaxError {
         System.out.println("IM parseAttackCommand");
-        String value = tkz.peek();
-        tkz.consume();
-        return new ActionCommand("shoot", parseDirection());
+        tkz.consume("shoot");
+        return new ActionCommand("shoot", parseDirection(),parseExpression());
     }
 
     //Direction → up | down | upleft | upright | downleft | downright
     private Direction parseDirection() throws SyntaxError {
         System.out.println("IM parseDirection");
         String value = tkz.peek();
+        tkz.consume();
         return new Direction(value);
     }
 
@@ -125,20 +125,20 @@ public class Parser implements ParserInterface {
     }
     //IfStatement → if ( Expression ) then Statement else Statemen
     private Statement parseIfStatement() throws SyntaxError {
-        System.out.println("IM IfStatement");
+        System.out.println("IM parseIfStatement");
+        System.out.println(tkz.peek());
         tkz.consume("if");
         tkz.consume("(");
         Statement Expression = parseExpression();
+        System.out.println(tkz.peek());
         tkz.consume(")");
-        String value = tkz.peek();
-        System.out.println(value);
+        System.out.println(tkz.peek());
         tkz.consume("then");
-        Statement thanStatement = parseStatement();
-        value = tkz.peek();
-        System.out.println(value);
+        Statement thenStatement = parseStatement();
+        System.out.println(tkz.peek());
         tkz.consume("else");
-        Statement elseStatement = parseStatement();
-        return new IfStatement(Expression,thanStatement,elseStatement);
+        Statement elseeStatement = parseStatement();
+        return new IfStatement(Expression, thenStatement, elseeStatement);
     }
 
     //WhileStatement → while ( Expression ) Statement
@@ -153,18 +153,14 @@ public class Parser implements ParserInterface {
     //Expression → Expression + Term | Expression - Term | Term
     private Statement parseExpression() throws SyntaxError {
         System.out.println("IM parseExpression");
-        String value = tkz.peek();
         Statement term = parseTerm();
-        while(value.equals("+") || value.equals("-")){
-            if(value.equals("+")){
-                tkz.consume();
-                term = new BinaryAri(term, "+", parseTerm());
-            }else if(value.equals("-")){
-                tkz.consume();
-                term = new BinaryAri(term, "-", parseTerm());
-            }else{
-                throw new SyntaxError("Error");
-            }
+        while(tkz.peek("+")) {
+            tkz.consume();
+            term = new BinaryAri(parseExpression(),"+",term);
+        }
+        while (tkz.peek("-")){
+            tkz.consume();
+            term = new BinaryAri(parseExpression(),"-",term);
         }
         return term;
     }
@@ -204,35 +200,38 @@ public class Parser implements ParserInterface {
     //Power → <number> | <identifier> | ( Expression ) | InfoExpression
     private Statement parsePower() throws SyntaxError {
         System.out.println("IM parsePower");
-            String value = tkz.peek();
-            if(isLong(value)) {
-                return new java.lang.Number(tkz.consume());
-            }else if(!isReservedKeyword(value)){
-                return new Identifier(tkz.consume());
-            }else if(tkz.peek("opponent") || tkz.peek("nearby")){
-                Expr v = parseInfoExpression();
-                return v;
-            }else{
-                tkz.consume("(");
-                Expr left = parseExpression();
-                tkz.consume(")");
-                return left;
-            }
+        if (tkz.isNumber(tkz.peek())) {
+            return new Long(Integer.parseInt(tkz.consume()));
+        } else if (tkz.peek("(")) {
+            tkz.consume("(");
+            Statement expression = parseExpression();
+            tkz.consume(")");
+            return expression;
+        } else if (tkz.peek("opponent") || tkz.peek("nearby")) {
+            return parseInfoExpression();
+        } else {
+            return parseIdentifier();
+        }
     }
 
+    //InfoExpression → opponent | nearby Direction
     private Statement parseInfoExpression() throws SyntaxError {
         System.out.println("IM parseInfoExpression");
         String value = tkz.peek();
             if(value.equals("opponent")) {
-                return new InfoExpression(tkz.consume());
+                tkz.consume();
+                return new InfoExpr("opponent");
+            }else if(value.equals("nearby")){
+                tkz.consume();
+                Direction direction = parseDirection();
+                return new InfoExpr("nearby",direction);
             }else {
-                InfoExpression left = new InfoExpression(tkz.consume());
-                Expr right = parseDirection();
-                return new BinaryAri(left, (Expr) null, right);
+                throw new SyntaxError("Error");
             }
     }
 
     private Identifier parseIdentifier() throws SyntaxError {
+        System.out.println("IM parseIdentifier");
         if (isReservedKeyword(tkz.peek())){
             tkz.consume();
             throw new SyntaxError("Error");
@@ -244,17 +243,6 @@ public class Parser implements ParserInterface {
         }
         throw new SyntaxError("Error");
     }
-
-
-    public static boolean isLong(String input) {
-        try {
-            Long.parseLong(input);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
 
 
     public static boolean isReservedKeyword(String input) {

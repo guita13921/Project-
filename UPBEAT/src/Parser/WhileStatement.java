@@ -10,7 +10,7 @@ public class WhileStatement implements Statement{
     }
 
     @Override
-    public long eval() {
+    public long evaluate() throws SyntaxError {
         return 0;
     }
 

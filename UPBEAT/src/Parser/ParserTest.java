@@ -2,16 +2,23 @@ package Parser;
 
 public class ParserTest {
     public static void main(String[] args) {
-        String input = "if (opponentLoc / 10 - 1)" +
-                "then " +
-                "if (opponentLoc % 10 - 5) then move downleft "+
+        String input = "while (deposit) { " +
+                "if (deposit - 100) " +
+                "then collect (deposit / 4) " +
+                "else if (budget - 25) then invest 25 " +
+                "else {} " +
+                "if (budget - 100) then {} else done  " +
+                "opponentLoc = opponent " +
+                "if (opponentLoc / 10 - 1) " +
+                "then  " +
+                "if (opponentLoc % 10 - 5) then move downleft " +
                 "else if (opponentLoc % 10 - 4) then move down " +
                 "else if (opponentLoc % 10 - 3) then move downright " +
                 "else if (opponentLoc % 10 - 2) then move right " +
                 "else if (opponentLoc % 10 - 1) then move upright " +
                 "else move up " +
                 "else if (opponentLoc) " +
-                "then " +
+                "then  " +
                 "if (opponentLoc % 10 - 5) then { " +
                 "cost = 10 ^ (nearby upleft % 100 + 1) " +
                 "if (budget - cost) then shoot upleft cost else {} " +
@@ -36,7 +43,7 @@ public class ParserTest {
                 "cost = 10 ^ (nearby up % 100 + 1) " +
                 "if (budget - cost) then shoot up cost else {} " +
                 "} " +
-                "else {" +
+                "else {  " +
                 "dir = random % 6 " +
                 "if (dir - 4) then move upleft " +
                 "else if (dir - 3) then move downleft " +
@@ -44,14 +51,12 @@ public class ParserTest {
                 "else if (dir - 1) then move downright " +
                 "else if (dir) then move upright " +
                 "else move up " +
-                "m = m + 1 " +"} ";
+                "m = m + 1 " +
+                "} " +
+                "} " +
+                "if (budget - 1) then invest 1 else {} ";
         Tokenizer lexer = new Tokenizer(input);
         Parser parser = new Parser(lexer);
-        try {
-            String sb = parser.parse();
-        } catch (Parser.SyntaxError syntaxError) {
-            throw new RuntimeException(syntaxError);
-        }
-        //parse_a.prettyPrint(sb);
+        parser.parse();
     }
 }
