@@ -1,6 +1,6 @@
 public class Box {
-    protected final int row;
-    protected final int column;
+    protected int row;
+    protected int column;
     public long deposit = 0;
     protected Player owner = null;
 
