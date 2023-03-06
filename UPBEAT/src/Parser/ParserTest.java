@@ -53,10 +53,9 @@ public class ParserTest {
                 "else move up " +
                 "m = m + 1 " +
                 "} " +
-                "} " +
-                "if (budget - 1) then invest 1 else {} ";
+                "} done";
         Tokenizer lexer = new Tokenizer(input);
         Parser parser = new Parser(lexer);
-        parser.parse();
+        String prayut = parser.parse();
     }
 }

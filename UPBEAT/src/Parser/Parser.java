@@ -3,7 +3,6 @@ package Parser;
 import java.util.LinkedList;
 
 public class Parser implements ParserInterface {
-
     private final Tokenizer tkz;
     private Plan plan;
     private VariableStorage variableStorage = new VariableStorage();
@@ -13,15 +12,17 @@ public class Parser implements ParserInterface {
     }
 
     @Override
+    public String parse() throws SyntaxError {
+        plan = parsePlan();
+        return plan.evaluate();
+    }
 
-    public String parse(){
+    private Plan parsePlan() throws SyntaxError {
         Plan plan = new Plan();
-        System.out.println("IM Parser.Plan");
-        if (!tkz.hasNextToken()) {
-            throw new SyntaxError(">> No more Tokens");
+        while (tkz.peek() != null) {
+            plan.addState(parseStatement());
         }
-        plan.addState(parseStatement());
-        return plan.eval();
+        return plan;
     }
 
     private Statement parseStatement() throws SyntaxError {
@@ -57,8 +58,9 @@ public class Parser implements ParserInterface {
         return new AssignStatement(identifier,"=",exp,variableStorage);
 
     }
-
+    //ActionCommand → done | relocate | MoveCommand | RegionCommand | AttackCommand
     private Statement parseActionCommand() throws SyntaxError {
+        System.out.println("IM parseActionCommand");
         String value = tkz.peek();
         if (value.equals("done")) {
             tkz.consume();
@@ -113,7 +115,7 @@ public class Parser implements ParserInterface {
     }
 
     //BlockStatement → { Statement* }
-    private BlockStatement parseBlockStatement() throws SyntaxError { //Not FInish
+    private BlockStatement parseBlockStatement() throws SyntaxError {
         System.out.println("IM parseBlockStatement");
         tkz.consume("{");
         LinkedList<Statement> state = new LinkedList<>();

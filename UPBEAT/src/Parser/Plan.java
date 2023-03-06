@@ -23,7 +23,7 @@ public class Plan {
         iterator = statement_list.iterator();
     }
 
-    public String eval() throws SyntaxError {
+    public String evaluate() throws SyntaxError {
         StringBuilder commandList = new StringBuilder();
         setIterator();
         while (hasNext()) {
@@ -31,6 +31,10 @@ public class Plan {
             state.evaluate();
             commandList = state.addCommand(commandList);
         }
-        return commandList.toString();
+        if(commandList == null){
+            return null;
+        }else{
+            return commandList.toString();
+        }
     }
 }

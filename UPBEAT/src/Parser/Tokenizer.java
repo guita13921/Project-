@@ -2,6 +2,7 @@ package Parser;
 
 import java.util.NoSuchElementException;
 import java.util.List;
+import java.util.Queue;
 
 public class Tokenizer {
     private final String token;
@@ -14,6 +15,11 @@ public class Tokenizer {
         this.token = token;
         computeNext();
     }
+
+    public String get_token(){
+        return token;
+    }
+
     private void computeNext() throws SyntaxError {
         StringBuilder s = new StringBuilder();
         while (position < token.length() && isSpace(token.charAt(position)))
@@ -49,7 +55,7 @@ public class Tokenizer {
 
     public String peek(){
         if(!hasNextToken()){
-            throw new NoSuchElementException("no more token");
+            return null;
         }else{
             return next;
         }
@@ -99,5 +105,9 @@ public class Tokenizer {
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    public boolean empty() {
+        return token.isEmpty();
     }
 }
