@@ -33,9 +33,12 @@ public class Citycrew {
 
     }
 
-    public LinkedList<Box> whoNearMe(){
-        LinkedList<Box> who = new LinkedList<>();
-        if()
+    public void checkAroudME(){
+        if(x-1 <= 0){
+            up = null;
+        }else{
+            up = map.getBox(map,x-1,y);
+        }
 //        who.add(new Box(x-1,y-1));
 //        who.add(new Box(x-1,y));
 //        who.add(new Box(x,y-1));
@@ -43,6 +46,10 @@ public class Citycrew {
 //        who.add(new Box(x+1,y-1));
 //        who.add(new Box(x+1,y+1));
 //        return who.;
+    }
+
+    public String showDirectionBox(){
+        return null;
     }
 
 //    public static void main(String[] args) {

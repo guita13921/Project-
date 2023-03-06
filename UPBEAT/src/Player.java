@@ -38,7 +38,7 @@ public class Player {
             p1.getBox();
 
             System.out.println(OwnBox.size());
-        System.out.println(man.whoNearMe());
+            man.checkAroudME();
 
         }
     }
