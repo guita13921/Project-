@@ -5,6 +5,6 @@ public class Main {
         System.out.println(demo.ShowMap()+"\n");
 
         demo.MapPrettyPrint();
-
+        //System.out.println(demo.getBox(,1,1));
     }
 }

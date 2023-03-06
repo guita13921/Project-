@@ -5,7 +5,6 @@ public class Box {
     protected Player owner = null;
 
 
-
     protected Box(int row,int column){
         this.row = row;
         this.column = column;
@@ -25,6 +24,7 @@ public class Box {
         }
     }
 
+
 //    protected void ChangeOwner(){//มันน่าจะไม่ต้องรับมั้ง
 //        owner = new Player();//อันนีอยากให้เปลี่ยนเป็นคนที่ลงทุน //หาวิธีเปลี่ยนเจ้าของ
 //    }
@@ -35,6 +35,10 @@ public class Box {
 
     protected int box_column_show(){
         return column;
+    }
+
+    public void box_show(){
+        System.out.println("("+this.box_row_show()+","+this.box_column_show()+")");
     }
 
     protected long box_deposit_show(){
