@@ -38,7 +38,7 @@ public class Player {
             p1.getBox();
 
             System.out.println(OwnBox.size());
-            man.checkAroudME();
+            System.out.println(man.up == demo.getBox(demo,1,1));
 
         }
     }
