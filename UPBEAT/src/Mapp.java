@@ -36,4 +36,9 @@ public class Mapp {
       }
     }
   }
+
+  public Box getBox(Mapp map,int rows, int cols){
+      return map.map.get(rows+cols-2);
+  }
+
   }

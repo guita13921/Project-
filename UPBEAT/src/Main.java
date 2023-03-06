@@ -4,6 +4,6 @@ public class Main {
         Mapp demo = new Mapp(5,5);
         System.out.println(demo.ShowMap()+"\n");
         demo.MapPrettyPrint();
-
+        //System.out.println(demo.getBox(,1,1));
     }
 }
