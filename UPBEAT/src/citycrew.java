@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+
 public class citycrew {
     Box imhere;
     Box box = new Box(0, 0);
@@ -17,6 +19,16 @@ public class citycrew {
     public  void whereImi(){
         System.out.println(imhere.row+" , "+ imhere.column);
 
+    }
+    public LinkedList<Box> whonearme(){
+        LinkedList<Box> who = new LinkedList<>();
+        who.add(new Box(x-1,y-1));
+        who.add(new Box(x-1,y));
+        who.add(new Box(x,y-1));
+        who.add(new Box(x-1,y+1));
+        who.add(new Box(x+1,y-1));
+        who.add(new Box(x+1,y+1));
+        return who;
     }
 
     public static void main(String[] args) {
