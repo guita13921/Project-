@@ -34,11 +34,35 @@ public class Citycrew {
     }
 
     public void checkAroudME(){
-        if(x-1 <= 0){
+        if(x-1 == 0&&y!=0){
             up = null;
         }else{
             up = map.getBox(map,x-1,y);
         }
+        if(x-1==0&&y-1 ==0){
+            ul = null;
+        }else {
+            ul = map.getBox(map, x-1, y-1);
+        }
+        if(x-1 ==0&&y+1!=0){
+            ur = null;
+        }else{
+            ur = map.getBox(map, x-1, y+1);
+        }
+        if(x!=0&&y-1==0){
+            dl = null;
+        }else {
+            dl = map.getBox(map, x, y-1);
+        }
+        if(x+1!=0&&y!=0){
+            d = map.getBox(map, x+1, y);
+        }if(x!=0&&y+1!=0){
+            dr = map.getBox(map,x, y+1);
+        }
+
+
+
+
 //        who.add(new Box(x-1,y-1));
 //        who.add(new Box(x-1,y));
 //        who.add(new Box(x,y-1));
