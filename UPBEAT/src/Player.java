@@ -6,12 +6,18 @@ import java.util.Map;
 public class Player {
     int budget;
     Box citycenter;
-    Box location;
-    String name;
-    citycrew man = new citycrew();
 
-  public Player(String name){
+    String name;
+    static Citycrew man;
+    Mapp mapP;
+
+
+
+  public Player(String name,Mapp mapP){
       this.name = name;
+      this.mapP = mapP;
+      this.citycenter = mapP.getBox(mapP,1,1);
+      man = new Citycrew(mapP,1, 1);
   }
     static Box box1 = new Box(1, 1);
 
@@ -24,13 +30,15 @@ public class Player {
 
 
     public static void main(String[] args) {
-            Player p1 = new Player("hum");
-            p1.box1.ChangeDeposit(23,p1);
+        Mapp demo = new Mapp(5,5);
+            Player p1 = new Player("hum",demo);
+            box1.ChangeDeposit(23,p1);
             System.out.println(box1.owner.name);
             System.out.println(box1.deposit);
             p1.getBox();
 
             System.out.println(OwnBox.size());
+        System.out.println(man.whoNearMe());
 
         }
     }

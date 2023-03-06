@@ -4,7 +4,19 @@ public class Citycrew {
     Box imhere;
     int x = 1;
     int y = 1;
+    Box ul;
+    Box up;
+    Box ur;
+    Box dl;
+    Box d;
+    Box dr;
+    Mapp map;
 
+    public Citycrew(Mapp map,int x,int y){
+        this.x = x;
+        this.y = y;
+        this.map = map;
+    }
     public void movecrew(int x, int y){
         this.x = x;
         this.y = y;
@@ -23,21 +35,22 @@ public class Citycrew {
 
     public LinkedList<Box> whoNearMe(){
         LinkedList<Box> who = new LinkedList<>();
-        who.add(new Box(x-1,y-1));
-        who.add(new Box(x-1,y));
-        who.add(new Box(x,y-1));
-        who.add(new Box(x-1,y+1));
-        who.add(new Box(x+1,y-1));
-        who.add(new Box(x+1,y+1));
-        return who;
+        if()
+//        who.add(new Box(x-1,y-1));
+//        who.add(new Box(x-1,y));
+//        who.add(new Box(x,y-1));
+//        who.add(new Box(x-1,y+1));
+//        who.add(new Box(x+1,y-1));
+//        who.add(new Box(x+1,y+1));
+//        return who.;
     }
 
-    public static void main(String[] args) {
-        Citycrew citycrew = new Citycrew();
-        Mapp demo = new Mapp(5,5);
-        demo.MapPrettyPrint();
-        for(int i =0;i<citycrew.whoNearMe().size();i++) {
-            citycrew.whoNearMe().get(i).box_show();
-        }
-    }
+//    public static void main(String[] args) {
+//        Citycrew citycrew = new Citycrew();
+//        Mapp demo = new Mapp(5,5);
+//        demo.MapPrettyPrint();
+//        for(int i =0;i<citycrew.whoNearMe().size();i++) {
+//            citycrew.whoNearMe().get(i).box_show();
+//        }
+//    }
 }
