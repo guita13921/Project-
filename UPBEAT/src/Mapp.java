@@ -26,10 +26,13 @@ public class Mapp {
   public void MapPrettyPrint(){
     int count = 0;
     for(int i = 0;i<map.size();i++){
-        System.out.print(map.get(i).box_row_show() + "," + map.get(i).box_column_show()+" ");
+      if(i % (rows) == 0 && i % 2 != 0){
+        System.out.print("  ");
+      }
+        System.out.print(" ("+map.get(i).box_row_show() + "," + map.get(i).box_column_show()+") ");
       count++;
       if (count % rows == 0) {
-        System.out.println(" ");
+        System.out.println("   ");
       }
     }
   }
