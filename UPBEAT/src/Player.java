@@ -7,6 +7,7 @@ public class Player {
     Box citycenter;
     Box location;
     String name;
+    citycrew man = new citycrew();
 
   public Player(String name){
       this.name = name;
@@ -19,6 +20,7 @@ public class Player {
             OwnBox.add(box1);
         }
     }
+
 
     public static void main(String[] args) {
             Player p1 = new Player("hum");
