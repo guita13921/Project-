@@ -2,8 +2,8 @@ import java.util.ArrayList;
 
 public class Mapp {
   protected int Budget = 0;
-  private int rows;
-  private int cols;
+  protected int rows;
+  protected int cols;
   protected ArrayList<Box> map = new ArrayList<>();
 
   public Mapp(int rows, int cols) {

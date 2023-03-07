@@ -32,33 +32,59 @@ public class Citycrew {
         System.out.println(imhere.row+" , "+ imhere.column);
 
     }
-
+    // x = row
+    // y = column
     public void checkAroudME(){
-        if(x-1 == 0&&y!=0){
+        if(x-1 == 0){
             up = null;
         }else{
             up = map.getBox(map,x-1,y);
         }
-        if(x-1==0&&y-1 ==0){
+        if(x-1==0&&y-1==0){
             ul = null;
-        }else {
+        }else{
             ul = map.getBox(map, x-1, y-1);
         }
-        if(x-1 ==0&&y+1!=0){
+        if(x-1>0&&y+1>map.rows){
             ur = null;
         }else{
-            ur = map.getBox(map, x-1, y+1);
+            ul = map.getBox(map, x-1, y+1);
         }
-        if(x!=0&&y-1==0){
+        if(x+1>map.cols){
+            d = null;
+        }else{
+            d = map.getBox(map, x+1, y);
+        }
+        if(x+1> map.cols&&y-1==0){
             dl = null;
         }else {
-            dl = map.getBox(map, x, y-1);
+            dl = map.getBox(map,x+1, y-1);
         }
-        if(x+1!=0&&y!=0){
-            d = map.getBox(map, x+1, y);
-        }if(x!=0&&y+1!=0){
-            dr = map.getBox(map,x, y+1);
+        if(x+1>map.cols&&y+1>map.rows){
+            dr = null;
+        }else{
+            dr = map.getBox(map, x+1, y+1);
         }
+//        if(x-1==0&&y-1 ==0){
+//            ul = null;
+//        }else {
+//            ul = map.getBox(map, x-1, y-1);
+//        }
+//        if(x-1 ==0&&y+1!=0){
+//            ur = null;
+//        }else{
+//            ur = map.getBox(map, x-1, y+1);
+//        }
+//        if(x!=0&&y-1==0){
+//            dl = null;
+//        }else {
+//            dl = map.getBox(map, x, y-1);
+//        }
+//        if(x+1!=0&&y!=0){
+//            d = map.getBox(map, x+1, y);
+//        }if(x!=0&&y+1!=0){
+//            dr = map.getBox(map,x, y+1);
+//        }
 
 
 
